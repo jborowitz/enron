@@ -9,12 +9,11 @@ enron = client.enron_mail
 coll = enron.messages
 # look at the messages collection inside that database
 
-b=coll.find({'subFolder':'tw-imbalances'}, fields='body',limit=50)
+b=coll.find({'subFolder':'tw_imbalances'}, fields='body',limit=50)
 # Look at every mesage in folder 'tw-imbalances', but only bring back the
 # body of the message
 one=coll.find_one()
 # Get a single message from the db
-
 sentences = nltk.sent_tokenize(one['body'])
 # tokenize a message into sentences using the recommended tokenizer
 #out = []
@@ -30,3 +29,13 @@ partOfSpeechTaggedSentences = [nltk.pos_tag(sentence) for sentence in wordTokeni
 # Tag parts of speech using recommended tokenizer
 
 namedEntities = [nltk.ne_chunk(sentence) for sentence in partOfSpeechTaggedSentences]
+
+# Begin working on other examples
+
+# Regex search of body
+b=client.enron_mail.messages.find({'body': { '$regex' : '.*settled.*'}})
+# This code does a (slow) regex search for times when the string
+# "settled" appears somewhere in the body
+b.count()
+# This is the number of email bodies where 'settled' appears.
+
