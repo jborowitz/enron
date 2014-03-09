@@ -51,4 +51,18 @@ with open('emails.json') as email_file:
         else:
             a.to_csv('file.csv', index=False, mode='a', header=False, encoding='utf-8')
 
-
+# The code below takes a random sample of emails. You might want to
+# use this to avoid working with too much data
+import random
+from bson.objectid import ObjectId
+b = coll.find({})
+with open('ids.csv','w') as f:
+    f.write('id\n')
+    for email in b:
+        f.write(str(email['_id']))
+        f.write('\n')
+sample_size = 1000
+ids = pandas.read_csv('ids.csv')
+sample = random.sample(ids.to_dict()['id'].values(), sample_size)
+data = coll.find({'_id':{'$in':[ObjectId(i) for i in sample]}})
+print(data.count())
